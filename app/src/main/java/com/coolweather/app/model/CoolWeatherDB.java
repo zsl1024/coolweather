@@ -24,7 +24,7 @@ public class CoolWeatherDB {
     /**
      * 数据库版本
      */
-    public static final int version = 1;
+    public static final int VERSION = 1;
 
     private static CoolWeatherDB coolWeatherDB;
 
@@ -34,7 +34,7 @@ public class CoolWeatherDB {
      * 将构造方法私有化
      */
     private CoolWeatherDB(Context context){
-        CoolWeatherOpenHelper dbHelper = new CoolWeatherOpenHelper(context, DB_NAME, null, version);
+        CoolWeatherOpenHelper dbHelper = new CoolWeatherOpenHelper(context, DB_NAME, null, VERSION);
         db = dbHelper.getWritableDatabase();
     }
 
@@ -96,7 +96,7 @@ public class CoolWeatherDB {
      */
     public List<City> loadCities(int provinceId){
         List<City> list = new ArrayList<City>();
-        Cursor cursor = db.query("City", null, "province_id = ?", new String[]{String.valueOf(provinceId)},null, null, null );
+        Cursor cursor = db.query("City", null, "province_id = ? ", new String[]{String.valueOf(provinceId)},null, null, null );
         if (cursor.moveToFirst()){
             do {
                 City city = new City();
@@ -127,10 +127,11 @@ public class CoolWeatherDB {
      */
     public List<County> loadCounties(int cityId){
         List<County> list = new ArrayList<County>();
-        Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(cityId)}, null, null, null);
+        Cursor cursor = db.query("County", null, "city_id = ? ", new String[]{String.valueOf(cityId)}, null, null, null);
         if (cursor.moveToFirst()){
             do {
                 County county = new County();
+                county.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
                 county.setCountyCode(cursor.getString(cursor.getColumnIndex("county_code")));
                 county.setCityId(cityId);
